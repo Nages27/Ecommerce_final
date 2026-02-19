@@ -24,7 +24,7 @@
     <div class="nav-box">
         <div class="main-links">
             <a href="{% url 'dashboard' %}">Home</a>
-            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'electronics' %}">Shop To</a>
             <a href="{% url 'logout' %}">Logout</a>
         </div>
     </div>
@@ -34,26 +34,25 @@
 <div class="product-detail-view">
     <div class="product-visual">
         <div class="color-block">
-            <img src="{% static product.image %}" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
         </div>
     </div>
 
     <div class="product-description-content">
-        <span class="date-label">NOVEMBER RELEASE</span>
+        <span class="date-label" style="font-weight: bolder; font-size: x-large;">NOVEMBER RELEASE</span>
         <h1 class="item-name">{{ product.name }}</h1>
         <div class="item-text">
-         <p style="color: #000000; font-style: italic; text-align: justify; line-height: 1.5;">{{ product.description }}</p>
-         <div style="display: flex; gap: 10px; margin-top: 10px; color: #000000; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: bold;"></div>
-         <p style="margin: 0;font-weight: bolder; color: #000000;">PRICE : {{product.price}}</p>
-        <p style="margin: 0;font-weight: bolder;color: #000000;">Quantity : {{ product.quantity }}</p>
+         <p style="color: #000000; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; text-align: justify; line-height: 1.5;font-size:large;">{{ product.description }}</p>
+         <div style="display: flex; gap: 10px; margin-top: 10px; color: #000000; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: bolder;"></div>
+         <p style="margin: 0;font-weight: bolder; color: #000000; font-size: larger;">PRICE : {{product.price}}</p>
         </div>
         </div>
 
 
         <div class="action-row">
-            <a href="{% url 'add' product.id %}" class="black-btn">ADD TO CART</a>
+            <a href="{% url 'add' product.id %}" class="black-btn" style="margin-top: 500px; margin-left:0; border-radius: 20px;">ADD TO CART</a>
     
-   <a href="{% url 'order' product.id %}"><button>PLACE ORDER</button></a> 
+   
 </div>
 {% endblock %}
 

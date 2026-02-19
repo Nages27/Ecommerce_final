@@ -14,11 +14,19 @@ class CartItem(models.Model):
     product_id = models.IntegerField(default=0)
     quantity = models.IntegerField(default=1)
 
-class Order(models.Model):
-    user = models.ForeignKey(CustomerData, on_delete=models.CASCADE)
-    product_name = models.CharField(max_length=200)
-    product_description = models.TextField()
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image=models.ImageField(upload_to='product_photos/') 
+    def __str__(self): 
+        return f"{self.name} | ₹{self.price} | {self.description}"
+
+
+class Order(models.Model):
+    user  = models.ForeignKey(CustomerData, on_delete=models.CASCADE)
+    product = models.CharField(max_length=200)
     quantity = models.IntegerField()
-    status = models.CharField(max_length=20, default="Pending")
-    ordered_at = models.DateTimeField(auto_now_add=True)
+    subtotal = models.FloatField(default=0) 
+    image = models.ImageField(upload_to='product_photos/', null=True, blank=True) 
+    created_at = models.DateTimeField(auto_now_add=True,null=True)    

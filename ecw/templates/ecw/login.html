@@ -3,14 +3,12 @@
 {% block page_heading %}Login{% endblock %}
 {%block content%}
 
-
-
-{% if error_message %}
-<p>{{error_message}}</p>
-{% endif %}
 <div class="auth-wrapper">
     <div class="auth-card">
 <form action="{% url 'login' %}" method="post">
+    {% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
  {% csrf_token %}
    <fieldset>
     <label>Email:</label>
@@ -20,7 +18,10 @@
     <input type="password" name="password" placeholder="Enter the password">
     </fieldset>
 
-    <button>submit</button>
+    <div style="display: flex; gap: 10px; justify-content: flex-start;">
+    <button type="submit" style="padding: 5px 15px; font-size: 14px; text-decoration: none; color: white; background-color: #007bff; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;">login</button>
+    <a href="{% url 'signup' %}" style="padding: 5px 15px; font-size: 14px; text-decoration: none; color: white; background-color: #007bff; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;">signup</a>
+</div>
 </form>
     </div>
 </div>

@@ -1,25 +1,202 @@
-{% extends 'ecw/base.html' %}
+
 {% load static %}
 
-{% block title %}View Cart{% endblock %}
-
 {% block content %}
-<h2>Your Cart</h2>
+<style>
+body {
+    background-color: #dcd2e7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+header {
+    width: 100%;           
+    background: #333;   
+    color: white;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    padding: 15px 5%;      
+    box-sizing: border-box;
+}
 
-{% if cart %}
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-        {% for item in cart %}
-            <div style="border: 1px solid #ccc; padding: 15px; width: 200px; text-align: center; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <img src="{% static item.image %}" width="150" style="margin-bottom: 10px;">
-                <p style="font-weight: bold; margin: 5px 0; color: black;">Product Name : {{ item.name }}</p>
-                <p style="color: #020202; margin: 5px 0; font-weight: bold">Price : ₹{{ item.price }}</p>
-                <p style="font-weight: bold;color: #020202; margin: 5px 0; ">Quantity : {{item.quantity}}</p>
+.nav-box {
+    background-color: #333;
+    padding: 12px 20px;
+}
+.nav-box a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.nav-box a:hover {
+    color: #050403;
+}
+
+.dashboard-container {
+    width: 100%;
+}
+
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.cart-products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; 
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.cart-card {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    width: 140px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cart-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.cart-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+.cart-card p {
+    margin: 4px 0;
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+.cart-card a {
+    font-size: 16px;
+    margin: 0 5px;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+.cart-card a:hover {
+    color: #080807;
+}
+
+.cart-table {
+    width: 60%;
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    font-size: 14px;
+}
+.cart-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+}
+.cart-table td {
+    background-color: #fff;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+.cart-table tr:hover td {
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(12, 11, 11, 0.1);
+}
+.order-btn {
+    display: block;
+    width: 180px;
+    margin: 30px auto;
+    padding: 12px 0;
+    text-align: center;
+    background-color: #070706;
+    color: white;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+.order-btn:hover {
+    background-color: #d18e00;
+}
+
+.empty-cart {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+}
+</style>
+
+<div class="dashboard-container">
+    <header style="justify-content: flex-end;">
+        <div class="nav-box">
+            <div class="main-links">
+                <a href="{% url 'dashboard' %}">Home</a>
+                <a href="{% url 'electronics' %}">Shop To</a>
+                <a href="{% url 'logout' %}">Logout</a>
             </div>
+        </div>
+    </header>
+
+    <h2>Your Cart</h2>
+
+    {% if cart_items %}
+    <div class="cart-products">
+        {% for item in cart_items %}
+        <div class="cart-card">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+            <p>{{ item.product.name }}</p>
+            <p>₹{{ item.product.price }}</p>
+            <p>
+                <a href="{% url 'decrease_quantity' item.product.id %}">−</a>
+                {{ item.quantity }}
+                <a href="{% url 'increase_quantity' item.product.id %}">+</a>
+            </p>
+        </div>
         {% endfor %}
     </div>
-{% else %}
-    <p style="text-align: center; margin-top: 20px;">Your cart is empty</p>
-{% endif %}
+    <table class="cart-table">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price (₹)</th>
+            <th>Subtotal (₹)</th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.product.price }}</td>
+            <td>₹{{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3" style="text-align:right;"><strong>Total</strong></td>
+            <td><strong>₹{{ total_price }}</strong></td>
+        </tr>
+    </table>
 
+
+    <a href="{% url 'pl_order' %}" class="order-btn">Place Order</a>
+
+    {% else %}
+    <p class="empty-cart">Your cart is empty</p>
+    {% endif %}
+</div>
 {% endblock %}
-

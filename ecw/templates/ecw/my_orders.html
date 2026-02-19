@@ -4,48 +4,122 @@
 
 {% block content %}
 <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #a5cbee;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-box {
+   
+        padding: 12px 20px;
+        display: flex;
+        justify-content: flex-start;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    .nav-box a {
+        color: white;
+        margin-right: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .nav-box a:hover {
+        color: #ffb74d;
+    }
+
+    .history-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #ddadad;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .history-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #020103;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
         text-align: center;
     }
+
     th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
+        padding: 15px 10px;
+        border-bottom: 56px solid #3a0e0e;
+        background-color: #ecdcc3;
+        color: #000000;
+      font-weight:bolder;
     }
+
     th {
-        background-color: #f2f2f2;
+        background-color: #7b1fa2;
+        color: rgb(7, 4, 4);
+        font-weight: bolder;
+        letter-spacing: 0.5px;
+         border-bottom: 3px solid #3a0e0e;
     }
-    tr:nth-child(even) {
-        background-color: #fafafa;
+
+    tbody tr:nth-child(even) {
+        background-color: #0d000f;
     }
-    tr:hover {
-        background-color: #f1f1f1;
+
+    tbody tr:hover {
+        background-color: #e1bee7;
+        transition: 0.3s ease;
     }
-    .nav-box {
-        background-color: #333;
-        padding: 10px;
+
+    td img {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .nav-box a {
-        color: white;
-        margin-right: 15px;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    .nav-box a:hover {
-        color: #f0a500;
+
+    @media screen and (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        td {
+            text-align: left;
+            padding: 10px 5px;
+            position: relative;
+        }
+
+        td:before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+
+        td img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
     }
 </style>
+
 <header>
     <div class="nav-box">
-        <div class="main-links">
-            <a href="{% url 'dashboard' %}">Home</a>
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-        </div>
+        <a href="{% url 'dashboard' %}">Home</a>
+        <a href="{% url 'electronics' %}">Shop To</a>
+        <a href="{% url 'logout' %}">Logout</a>
     </div>
 </header>
+
 <div class="history-container">
     <h2>My Orders</h2>
 
@@ -53,29 +127,27 @@
         <table class="order-table">
             <thead>
                 <tr>
-                 <th>Product</th>
-                 <th>Description</th>
-                 <th>Price</th>
-                 <th>Quantity</th>
-                 <th>Status</th>
-                 <th>Ordered At</th>
+                    <th></th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Ordered At</th>
                 </tr>
             </thead>
             <tbody>
             {% for order in orders %}
-            <tr>
-                 <td>{{ order.product_name }}</td>
-                 <td>{{ order.product_description }}</td>
-                <td>₹{{ order.price }}</td>
-                <td>{{ order.quantity }}</td>
-                <td>{{ order.status }}</td>
-                 <td>{{ order.ordered_at|date:"d M Y" }}</td>
+                <tr>
+                    <td><img src="{{ order.image.url }}" width="100"></td>
+                    <td>{{ order.product }}</td>
+                    <td>₹{{ order.subtotal }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.created_at|date:"d M Y" }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No orders placed yet.</p>
+        <p style="text-align:center; font-size:1.1em; margin-top:20px; color:#7b1fa2;">No orders placed yet.</p>
     {% endif %}
 </div>
 {% endblock %}

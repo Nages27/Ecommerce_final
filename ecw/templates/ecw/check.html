@@ -1,0 +1,113 @@
+{% extends 'ecw/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    body {
+        background-color: #e0f7fa; 
+    }
+
+    .payment-box-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        background: #f0f2f5;
+    }
+
+    .payment-box {
+        background: #ffffff;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        text-align: center;
+        width: 380px;
+        font-family: 'Helvetica', Arial, sans-serif;
+        transition: transform 0.3s ease;
+    }
+
+    .payment-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .payment-box h2 {
+        margin-bottom: 25px;
+        font-size: 24px;
+        color: #00796b; 
+    }
+
+    .payment-box p {
+        margin: 12px 0;
+        font-size: 16px;
+        color: #555;
+    }
+
+    .payment-box p strong {
+        color: #004d40; 
+    }
+
+    .payment-box .amount-badge {
+        display: inline-block;
+        background: #ff9800; 
+        color: #fff;
+        font-weight: bold;
+        padding: 8px 15px;
+        border-radius: 50px;
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    #rzp-button1 {
+        margin-top: 25px;
+        background: linear-gradient(135deg, #43a047, #66bb6a); 
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        font-size: 17px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    #rzp-button1:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+</style>
+
+<div class="payment-box-wrapper">
+    <div class="payment-box">
+        <h2>Payment Details</h2>
+        <p><strong>Order ID:</strong> {{ order_id }}</p>
+        <p><strong>Name:</strong> {{ Name }}</p>
+        <p><strong>Email:</strong> {{ Email }}</p>
+        <p class="amount-badge">₹{{ amount }}</p>
+
+        <button id="rzp-button1">Pay Now</button>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{ RAZORPAY_KEY_ID }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "order_id": "{{ order_id }}",
+    "handler": function (response) {
+        alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id +
+              "\nOrder ID: " + response.razorpay_order_id);
+        window.location.href = "{% url 'place_order' %}";
+    }
+};
+
+var rzp1 = new Razorpay(options);
+
+document.getElementById("rzp-button1").onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock %}

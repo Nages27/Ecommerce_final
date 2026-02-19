@@ -9,10 +9,9 @@
     </div>
     <nav class="nav-links">
         <a href="{% url 'dashboard' %}">Home</a>
-        <a href="{% url 'view_cart' %}">View Cart</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'view_cart' %}">Cart</a>
         <a href="{% url 'my_orders' %}">My Orders</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
     </nav>
 </header>
@@ -34,7 +33,7 @@
         {% for product in products %}
         <div class="product-card">
             <div class="img-box">
-                <img src="{% static product.image %}" alt="{{product.name}}">
+                <img src="{{ product.image.url }}" alt="{{product.name}}">
             </div>
             <h3>{{product.name}}</h3>
             <div class="card-actions">
