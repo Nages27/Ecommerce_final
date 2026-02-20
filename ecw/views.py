@@ -76,7 +76,9 @@ def dashboard(request):
 
 def electronics(request):
       products=Product.objects.all()
-      return render(request,'ecw/electronics.html',{'products':products})
+     cart = request.session.get('cart', {})
+      cart_count = sum(cart.values())
+      return render(request,'ecw/electronics.html',{'products':products, 'cart_count': cart_count})
 
 
 
